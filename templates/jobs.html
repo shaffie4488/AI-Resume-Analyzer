@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Job Recommendations - ResumeIQ</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<!-- ==========================================
+     HEADER
+========================================== -->
+
+<header class="dashboard-header">
+
+    <div class="logo">
+        ResumeIQ
+    </div>
+
+
+    <nav>
+
+        <a href="{{ url_for('dashboard') }}">
+            Dashboard
+        </a>
+
+        <a href="{{ url_for('upload') }}">
+            Analyze Resume
+        </a>
+
+        <a href="{{ url_for('jobs') }}">
+            Jobs
+        </a>
+
+        <!-- HISTORY BUTTON -->
+
+        <a href="{{ url_for('history') }}">
+            History
+        </a>
+
+        <a href="{{ url_for('logout') }}"
+           class="logout-link">
+            Logout
+        </a>
+
+    </nav>
+
+</header>
+
+
+<!-- ==========================================
+     JOB RECOMMENDATIONS
+========================================== -->
+
+<main class="jobs-container">
+
+
+    <!-- PAGE HEADER -->
+
+    <section class="jobs-header">
+
+        <p class="dashboard-label">
+            CAREER RECOMMENDATIONS
+        </p>
+
+        <h1>
+            Recommended Jobs
+        </h1>
+
+        <p>
+            Based on the skills detected from your resume.
+        </p>
+
+    </section>
+
+
+    <!-- =====================================
+         JOB CARDS
+    ====================================== -->
+
+    <section class="jobs-grid">
+
+        {% for job in jobs %}
+
+        <div class="job-card">
+
+
+            <!-- Job Icon -->
+
+            <div class="job-icon">
+                💼
+            </div>
+
+
+            <!-- Job Title -->
+
+            <h2>
+                {{ job.title }}
+            </h2>
+
+
+            <!-- Description -->
+
+            <p class="job-description">
+                {{ job.description }}
+            </p>
+
+
+            <!-- Required Skills -->
+
+            <div class="job-skills">
+
+                {% for skill in job.skills %}
+
+                <span>
+                    {{ skill }}
+                </span>
+
+                {% endfor %}
+
+            </div>
+
+
+            <!-- Match Percentage -->
+
+            <div class="job-footer">
+
+                <span>
+                    🎯 {{ job.match }}% Match
+                </span>
+
+            </div>
+
+
+        </div>
+
+        {% endfor %}
+
+    </section>
+
+
+    <!-- =====================================
+         NO JOBS MESSAGE
+    ====================================== -->
+
+    {% if not jobs %}
+
+    <div class="no-jobs">
+
+        <div>
+            🔍
+        </div>
+
+        <h2>
+            No job recommendations yet
+        </h2>
+
+        <p>
+            Upload and analyze your resume first.
+        </p>
+
+        <a href="{{ url_for('upload') }}"
+           class="dashboard-button">
+
+            Analyze Resume
+
+        </a>
+
+    </div>
+
+    {% endif %}
+
+
+</main>
+
+
+</body>
+
+</html>

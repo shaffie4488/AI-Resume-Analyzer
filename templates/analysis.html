@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Resume Analysis - ResumeIQ</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<!-- =====================================
+     NAVIGATION
+===================================== -->
+
+<header class="dashboard-header">
+
+    <div class="logo">
+        ResumeIQ
+    </div>
+
+    <nav>
+
+        <a href="{{ url_for('dashboard') }}">
+            Dashboard
+        </a>
+
+        <a href="{{ url_for('upload') }}">
+            Analyze Resume
+        </a>
+
+        <a href="{{ url_for('jobs') }}">
+            Jobs
+        </a>
+
+        <a href="{{ url_for('history') }}">
+            History
+        </a>
+
+        <a href="{{ url_for('logout') }}"
+           class="logout-link">
+            Logout
+        </a>
+
+    </nav>
+
+</header>
+
+<!-- =====================================
+     MAIN CONTAINER
+===================================== -->
+
+<main class="analysis-container">
+
+
+    <!-- =================================
+         PAGE HEADER
+    ================================== -->
+
+    <section class="analysis-header">
+
+        <p class="dashboard-label">
+            AI RESUME ANALYSIS
+        </p>
+
+        <h1>
+            Your Resume Analysis
+        </h1>
+
+        <p>
+            Resume:
+            <strong>
+                {{ resume_filename }}
+            </strong>
+        </p>
+
+    </section>
+
+
+
+    <!-- =================================
+         RESUME SCORE
+    ================================== -->
+
+    <section class="score-card">
+
+        <div class="score-circle">
+
+            <span>
+                {{ score }}
+            </span>
+
+            <small>
+                / 100
+            </small>
+
+        </div>
+
+
+        <div class="score-info">
+
+            <h2>
+                Overall Resume Score
+            </h2>
+
+
+            {% if score >= 80 %}
+
+                <p>
+                    Excellent! Your resume has strong
+                    content and skills.
+                </p>
+
+            {% elif score >= 60 %}
+
+                <p>
+                    Good resume! A few improvements
+                    can make it stronger.
+                </p>
+
+            {% elif score >= 40 %}
+
+                <p>
+                    Your resume has a good foundation,
+                    but several areas need improvement.
+                </p>
+
+            {% else %}
+
+                <p>
+                    Your resume needs improvement.
+                    Follow the recommendations below.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================
+         ANALYSIS CARDS
+    ================================== -->
+
+    <section class="analysis-grid">
+
+
+        <!-- DETECTED SKILLS -->
+
+        <div class="analysis-card">
+
+            <div class="analysis-card-icon">
+                🛠️
+            </div>
+
+            <h2>
+                Detected Skills
+            </h2>
+
+            <div class="skill-list">
+
+                {% if detected_skills %}
+
+                    {% for skill in detected_skills %}
+
+                        <span>
+                            {{ skill }}
+                        </span>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <p>
+                        No supported technical skills
+                        were detected.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+
+        <!-- RECOMMENDED SKILLS -->
+
+        <div class="analysis-card">
+
+            <div class="analysis-card-icon">
+                💡
+            </div>
+
+            <h2>
+                Recommended Skills
+            </h2>
+
+            <div class="skill-list missing">
+
+                {% if recommended_skills %}
+
+                    {% for skill in recommended_skills %}
+
+                        <span>
+                            {{ skill }}
+                        </span>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <p>
+                        No additional skills recommended.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+
+        <!-- JOB ROLES -->
+
+        <div class="analysis-card">
+
+            <div class="analysis-card-icon">
+                🎯
+            </div>
+
+            <h2>
+                Recommended Job Roles
+            </h2>
+
+            <ul class="role-list">
+
+                {% for role in job_roles %}
+
+                    <li>
+                        {{ role }}
+                    </li>
+
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =================================
+         RESUME CONTENT CHECK
+    ================================== -->
+
+    <section class="resume-check-card">
+
+        <h2>
+            Resume Content Check
+        </h2>
+
+
+        <div class="check-grid">
+
+
+            <!-- EDUCATION -->
+
+            <div class="check-item">
+
+                {% if education_found %}
+
+                    <span class="check-good">
+                        ✓
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Education
+                        </strong>
+
+                        <p>
+                            Education information detected.
+                        </p>
+
+                    </div>
+
+                {% else %}
+
+                    <span class="check-bad">
+                        !
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Education
+                        </strong>
+
+                        <p>
+                            Education information is missing.
+                        </p>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+
+            <!-- EXPERIENCE -->
+
+            <div class="check-item">
+
+                {% if experience_found %}
+
+                    <span class="check-good">
+                        ✓
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Experience
+                        </strong>
+
+                        <p>
+                            Experience information detected.
+                        </p>
+
+                    </div>
+
+                {% else %}
+
+                    <span class="check-bad">
+                        !
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Experience
+                        </strong>
+
+                        <p>
+                            Add internship or work experience.
+                        </p>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+
+            <!-- PROJECTS -->
+
+            <div class="check-item">
+
+                {% if project_found %}
+
+                    <span class="check-good">
+                        ✓
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Projects
+                        </strong>
+
+                        <p>
+                            Project information detected.
+                        </p>
+
+                    </div>
+
+                {% else %}
+
+                    <span class="check-bad">
+                        !
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Projects
+                        </strong>
+
+                        <p>
+                            Add projects to your resume.
+                        </p>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+
+            <!-- =================================
+                 CERTIFICATIONS
+            ================================== -->
+
+            <div class="check-item">
+
+                {% if certification_found %}
+
+                    <span class="check-good">
+                        ✓
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Certifications
+                        </strong>
+
+                        <p>
+                            Certification information detected.
+                        </p>
+
+                    </div>
+
+                {% else %}
+
+                    <span class="check-bad">
+                        !
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Certifications
+                        </strong>
+
+                        <p>
+                            Add relevant certifications.
+                        </p>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+
+            <!-- =================================
+                 CONTACT INFORMATION
+            ================================== -->
+
+            <div class="check-item">
+
+                {% if contact_found %}
+
+                    <span class="check-good">
+                        ✓
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Contact Information
+                        </strong>
+
+                        <p>
+                            Contact information detected.
+                        </p>
+
+                    </div>
+
+                {% else %}
+
+                    <span class="check-bad">
+                        !
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Contact Information
+                        </strong>
+
+                        <p>
+                            Add email, phone, LinkedIn or GitHub.
+                        </p>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================
+         AI SUGGESTIONS
+    ================================== -->
+
+    <section class="suggestions-card">
+
+        <div class="suggestions-title">
+
+            <span>
+                🤖
+            </span>
+
+            <h2>
+                AI Improvement Suggestions
+            </h2>
+
+        </div>
+
+
+        <div class="suggestions-list">
+
+            {% for suggestion in suggestions %}
+
+                <div class="suggestion-item">
+
+                    <span>
+                        💡
+                    </span>
+
+                    <p>
+                        {{ suggestion }}
+                    </p>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================
+         EXTRACTED RESUME TEXT
+    ================================== -->
+
+    <section class="resume-text-card">
+
+        <h2>
+            Extracted Resume Content
+        </h2>
+
+        <p class="resume-text">
+            {{ resume_text }}
+        </p>
+
+    </section>
+
+
+
+    <!-- =================================
+         ACTION BUTTONS
+    ================================== -->
+
+    <section class="analysis-actions">
+
+        <a href="{{ url_for('upload') }}"
+           class="dashboard-button">
+
+            Analyze Another Resume
+
+        </a>
+
+
+        <a href="{{ url_for('jobs') }}"
+           class="secondary-action">
+
+            View Job Recommendations
+
+        </a>
+
+    </section>
+
+
+</main>
+
+
+</body>
+
+</html>

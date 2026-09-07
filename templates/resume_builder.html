@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Resume Builder - ResumeIQ</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        /* =====================================================
+           RESUME BUILDER — PROFESSIONAL UI
+        ===================================================== */
+
+        .builder-page {
+            min-height: calc(100vh - 75px);
+            padding: 45px 5%;
+            background:
+                radial-gradient(circle at top left, #eef5ff 0%, transparent 30%),
+                #f5f7fb;
+        }
+
+        /* =====================================================
+           BUILDER HEADER
+        ===================================================== */
+
+        .builder-header {
+            max-width: 1250px;
+            margin: 0 auto 30px;
+        }
+
+        .builder-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 13px;
+            margin-bottom: 13px;
+            border: 1px solid #bfdbfe;
+            border-radius: 30px;
+            background: #eff6ff;
+            color: #2563eb;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1.4px;
+        }
+
+        .builder-label::before {
+            content: "✦";
+            font-size: 13px;
+        }
+
+        .builder-header h1 {
+            margin-bottom: 9px;
+            color: #111827;
+            font-size: 38px;
+            line-height: 1.2;
+            letter-spacing: -1px;
+        }
+
+        .builder-header p {
+            max-width: 720px;
+            color: #6b7280;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        /* =====================================================
+           MAIN LAYOUT
+        ===================================================== */
+
+        .builder-layout {
+            max-width: 1250px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 28px;
+            align-items: start;
+        }
+
+        /* =====================================================
+           FORM CARD
+        ===================================================== */
+
+        .builder-form {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 8px 30px rgba(15, 23, 42, 0.05);
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-section:last-of-type {
+            margin-bottom: 25px;
+        }
+
+        .form-section h2 {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 19px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e5e7eb;
+            color: #111827;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .form-section h2::before {
+            content: "";
+            width: 4px;
+            height: 20px;
+            border-radius: 4px;
+            background: #2563eb;
+        }
+
+        .builder-input-group {
+            margin-bottom: 17px;
+        }
+
+        .builder-input-group label {
+            display: block;
+            margin-bottom: 7px;
+            color: #374151;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .builder-input,
+        .builder-textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 9px;
+            outline: none;
+            background: #ffffff;
+            color: #111827;
+            font-family: inherit;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .builder-input::placeholder,
+        .builder-textarea::placeholder {
+            color: #9ca3af;
+        }
+
+        .builder-input:hover,
+        .builder-textarea:hover {
+            border-color: #9ca3af;
+        }
+
+        .builder-input:focus,
+        .builder-textarea:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+        }
+
+        .builder-textarea {
+            min-height: 115px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        /* =====================================================
+           TWO COLUMN INPUTS
+        ===================================================== */
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        /* =====================================================
+           FORM HINT
+        ===================================================== */
+
+        .input-hint {
+            display: block;
+            margin-top: 6px;
+            color: #9ca3af;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        /* =====================================================
+           GENERATE BUTTON
+        ===================================================== */
+
+        .builder-button {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 10px;
+            background: #2563eb;
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.18);
+            transition: all 0.25s ease;
+        }
+
+        .builder-button:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(37, 99, 235, 0.24);
+        }
+
+        .builder-button:active {
+            transform: translateY(0);
+        }
+
+        /* =====================================================
+           PREVIEW WRAPPER
+        ===================================================== */
+
+        .resume-preview-wrapper {
+            position: sticky;
+            top: 20px;
+        }
+
+        .preview-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .preview-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #111827;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .preview-title::before {
+            content: "👁";
+            font-size: 17px;
+        }
+
+        .preview-status {
+            padding: 5px 9px;
+            border-radius: 20px;
+            background: #ecfdf5;
+            color: #15803d;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        /* =====================================================
+           RESUME PAPER
+        ===================================================== */
+
+        .resume-preview {
+            min-height: 850px;
+            padding: 45px;
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            background: #ffffff;
+            box-shadow: 0 15px 40px rgba(15, 23, 42, 0.10);
+        }
+
+        .resume-name {
+            margin-bottom: 6px;
+            color: #111827;
+            font-size: 30px;
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -0.8px;
+        }
+
+        .resume-career {
+            margin-bottom: 13px;
+            color: #2563eb;
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .resume-contact {
+            margin-bottom: 23px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #2563eb;
+            color: #6b7280;
+            font-size: 11px;
+            line-height: 1.8;
+        }
+
+        .resume-section {
+            margin-bottom: 22px;
+        }
+
+        .resume-section h3 {
+            margin-bottom: 9px;
+            color: #2563eb;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+        }
+
+        .resume-section p {
+            margin: 0;
+            color: #374151;
+            font-size: 12.5px;
+            line-height: 1.75;
+            white-space: pre-line;
+        }
+
+        /* =====================================================
+           SKILLS
+        ===================================================== */
+
+        .resume-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+        }
+
+        .resume-skills span {
+            padding: 6px 9px;
+            border: 1px solid #dbeafe;
+            border-radius: 5px;
+            background: #eff6ff;
+            color: #2563eb;
+            font-size: 10.5px;
+            font-weight: 700;
+        }
+
+        /* =====================================================
+           PRINT BUTTON
+        ===================================================== */
+
+        .print-button {
+            width: 100%;
+            margin-top: 14px;
+            padding: 13px;
+            border: 1px solid #2563eb;
+            border-radius: 9px;
+            background: #ffffff;
+            color: #2563eb;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .print-button:hover {
+            background: #eff6ff;
+            transform: translateY(-1px);
+        }
+
+        /* =====================================================
+           EMPTY PREVIEW
+        ===================================================== */
+
+        .empty-preview {
+            min-height: 700px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .empty-preview-content {
+            max-width: 280px;
+        }
+
+        .empty-preview-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 18px;
+            background: #eff6ff;
+            font-size: 32px;
+        }
+
+        .empty-preview p {
+            color: #9ca3af;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .empty-preview strong {
+            color: #6b7280;
+        }
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 1000px) {
+
+            .builder-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .resume-preview-wrapper {
+                position: static;
+            }
+
+            .resume-preview {
+                max-width: 850px;
+                margin: auto;
+            }
+        }
+
+        @media (max-width: 700px) {
+
+            .builder-page {
+                padding: 30px 20px;
+            }
+
+            .builder-header h1 {
+                font-size: 30px;
+            }
+
+            .builder-form {
+                padding: 22px;
+            }
+
+            .input-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .resume-preview {
+                padding: 30px;
+            }
+        }
+
+        @media (max-width: 500px) {
+
+            .builder-header h1 {
+                font-size: 27px;
+            }
+
+            .builder-header p {
+                font-size: 14px;
+            }
+
+            .builder-form {
+                padding: 18px;
+                border-radius: 14px;
+            }
+
+            .form-section h2 {
+                font-size: 17px;
+            }
+
+            .resume-preview {
+                min-height: auto;
+                padding: 23px;
+            }
+
+            .resume-name {
+                font-size: 25px;
+            }
+
+            .resume-career {
+                font-size: 14px;
+            }
+
+            .preview-heading {
+                align-items: flex-start;
+                gap: 8px;
+                flex-direction: column;
+            }
+        }
+
+        /* =====================================================
+           PRINT
+        ===================================================== */
+
+        @media print {
+
+            @page {
+                size: A4;
+                margin: 0;
+            }
+
+            body {
+                background: white !important;
+            }
+
+            body * {
+                visibility: hidden;
+            }
+
+            .resume-preview,
+            .resume-preview * {
+                visibility: visible;
+            }
+
+            .resume-preview {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 210mm;
+                min-height: 297mm;
+                margin: 0;
+                padding: 20mm;
+                border: none;
+                border-radius: 0;
+                box-shadow: none;
+            }
+
+            .preview-heading,
+            .print-button,
+            .builder-header,
+            .builder-form,
+            .dashboard-header {
+                display: none !important;
+            }
+
+            .builder-page {
+                padding: 0;
+                background: white;
+            }
+
+            .builder-layout {
+                display: block;
+            }
+
+            .resume-section {
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+
+
+<body class="dashboard-body">
+
+    <!-- =====================================================
+         HEADER
+    ===================================================== -->
+
+    <header class="dashboard-header">
+
+        <div class="logo">
+            Resume<span>IQ</span>
+        </div>
+
+        <nav>
+
+            <a href="{{ url_for('dashboard') }}">
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('upload') }}">
+                Analyze Resume
+            </a>
+
+            <a href="{{ url_for('resume_builder') }}">
+                Resume Builder
+            </a>
+
+            <a href="{{ url_for('logout') }}"
+               class="logout-link">
+                Logout
+            </a>
+
+        </nav>
+
+    </header>
+
+
+    <!-- =====================================================
+         BUILDER PAGE
+    ===================================================== -->
+
+    <main class="builder-page">
+
+        <!-- PAGE HEADER -->
+
+        <div class="builder-header">
+
+            <span class="builder-label">
+                AI RESUME BUILDER
+            </span>
+
+            <h1>
+                Create Your Professional Resume
+            </h1>
+
+            <p>
+                Build a clean, professional and ATS-friendly resume
+                using your personal information, education, skills,
+                experience and projects.
+            </p>
+
+        </div>
+
+
+        <!-- =================================================
+             BUILDER LAYOUT
+        ================================================= -->
+
+        <div class="builder-layout">
+
+
+            <!-- =================================================
+                 FORM
+            ================================================= -->
+
+            <form
+                method="POST"
+                action="{{ url_for('resume_builder') }}"
+                class="builder-form"
+            >
+
+
+                <!-- =================================================
+                     PERSONAL INFORMATION
+                ================================================= -->
+
+                <div class="form-section">
+
+                    <h2>
+                        Personal Information
+                    </h2>
+
+
+                    <div class="builder-input-group">
+
+                        <label>
+                            Full Name
+                        </label>
+
+                        <input
+                            type="text"
+                            name="name"
+                            class="builder-input"
+                            placeholder="Mohamed Ibrahim Shafie"
+                            value="{{ resume.name if resume else '' }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="input-row">
+
+                        <div class="builder-input-group">
+
+                            <label>
+                                Email
+                            </label>
+
+                            <input
+                                type="email"
+                                name="email"
+                                class="builder-input"
+                                placeholder="yourname@email.com"
+                                value="{{ resume.email if resume else '' }}"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="builder-input-group">
+
+                            <label>
+                                Phone
+                            </label>
+
+                            <input
+                                type="text"
+                                name="phone"
+                                class="builder-input"
+                                placeholder="+91 XXXXX XXXXX"
+                                value="{{ resume.phone if resume else '' }}"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="builder-input-group">
+
+                        <label>
+                            Location
+                        </label>
+
+                        <input
+                            type="text"
+                            name="location"
+                            class="builder-input"
+                            placeholder="Tamil Nadu, India"
+                            value="{{ resume.location if resume else '' }}"
+                        >
+
+                    </div>
+
+
+                    <div class="input-row">
+
+                        <div class="builder-input-group">
+
+                            <label>
+                                LinkedIn
+                            </label>
+
+                            <input
+                                type="text"
+                                name="linkedin"
+                                class="builder-input"
+                                placeholder="linkedin.com/in/yourname"
+                                value="{{ resume.linkedin if resume else '' }}"
+                            >
+
+                        </div>
+
+
+                        <div class="builder-input-group">
+
+                            <label>
+                                GitHub
+                            </label>
+
+                            <input
+                                type="text"
+                                name="github"
+                                class="builder-input"
+                                placeholder="github.com/yourname"
+                                value="{{ resume.github if resume else '' }}"
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     CAREER INFORMATION
+                ================================================= -->
+
+                <div class="form-section">
+
+                    <h2>
+                        Career Information
+                    </h2>
+
+
+                    <div class="builder-input-group">
+
+                        <label>
+                            Career Title
+                        </label>
+
+                        <input
+                            type="text"
+                            name="career"
+                            class="builder-input"
+                            placeholder="Frontend Developer | UI/UX Designer"
+                            value="{{ resume.career if resume else '' }}"
+                        >
+
+                    </div>
+
+
+                    <div class="builder-input-group">
+
+                        <label>
+                            Professional Summary
+                        </label>
+
+                        <textarea
+                            name="summary"
+                            class="builder-textarea"
+                            placeholder="Write a short professional summary..."
+                        >{{ resume.summary if resume else '' }}</textarea>
+
+                        <small class="input-hint">
+                            Keep your summary concise and focused on your
+                            strongest skills, experience and career goals.
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     SKILLS
+                ================================================= -->
+
+                <div class="form-section">
+
+                    <h2>
+                        Skills
+                    </h2>
+
+
+                    <div class="builder-input-group">
+
+                        <label>
+                            Technical Skills
+                        </label>
+
+                        <textarea
+                            name="skills"
+                            class="builder-textarea"
+                            placeholder="HTML, CSS, JavaScript, Python, Flask, SQL, Figma"
+                        >{{ resume.skills if resume else '' }}</textarea>
+
+                        <small class="input-hint">
+                            Separate each skill with a comma.
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     EDUCATION
+                ================================================= -->
+
+                <div class="form-section">
+
+                    <h2>
+                        Education
+                    </h2>
+
+
+                    <div class="builder-input-group">
+
+                        <label>
+                            Education Details
+                        </label>
+
+                        <textarea
+                            name="education"
+                            class="builder-textarea"
+                            placeholder="B.E Computer Science and Engineering&#10;Nellai College of Engineering&#10;2023"
+                        >{{ resume.education if resume else '' }}</textarea>
+
+                        <small class="input-hint">
+                            Add your degree, institution and graduation year.
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     EXPERIENCE
+                ================================================= -->
+
+                <div class="form-section">
+
+                    <h2>
+                        Experience
+                    </h2>
+
+
+                    <div class="builder-input-group">
+
+                        <label>
+                            Internship / Work Experience
+                        </label>
+
+                        <textarea
+                            name="experience"
+                            class="builder-textarea"
+                            placeholder="Frontend Developer Intern&#10;Company Name&#10;Worked on responsive websites..."
+                        >{{ resume.experience if resume else '' }}</textarea>
+
+                        <small class="input-hint">
+                            Mention your role, company and key responsibilities.
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     PROJECTS
+                ================================================= -->
+
+                <div class="form-section">
+
+                    <h2>
+                        Projects
+                    </h2>
+
+
+                    <div class="builder-input-group">
+
+                        <label>
+                            Projects
+                        </label>
+
+                        <textarea
+                            name="projects"
+                            class="builder-textarea"
+                            placeholder="AI Resume Analyzer&#10;Developed a Flask-based application..."
+                        >{{ resume.projects if resume else '' }}</textarea>
+
+                        <small class="input-hint">
+                            Include project name, technologies and what you built.
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     CERTIFICATIONS
+                ================================================= -->
+
+                <div class="form-section">
+
+                    <h2>
+                        Certifications
+                    </h2>
+
+
+                    <div class="builder-input-group">
+
+                        <label>
+                            Certifications
+                        </label>
+
+                        <textarea
+                            name="certifications"
+                            class="builder-textarea"
+                            placeholder="Python Programming Certification&#10;UI/UX Design Certification"
+                        >{{ resume.certifications if resume else '' }}</textarea>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     GENERATE
+                ================================================= -->
+
+                <button
+                    type="submit"
+                    class="builder-button"
+                >
+                    ✨ Generate My Resume
+                </button>
+
+            </form>
+
+
+            <!-- =================================================
+                 PREVIEW
+            ================================================= -->
+
+            <div class="resume-preview-wrapper">
+
+
+                <div class="preview-heading">
+
+                    <div class="preview-title">
+                        Resume Preview
+                    </div>
+
+                    {% if resume %}
+                        <span class="preview-status">
+                            ✓ Ready
+                        </span>
+                    {% endif %}
+
+                </div>
+
+
+                {% if resume %}
+
+                <!-- =================================================
+                     RESUME PAPER
+                ================================================= -->
+
+                <div class="resume-preview">
+
+
+                    <!-- NAME -->
+
+                    <div class="resume-name">
+                        {{ resume.name }}
+                    </div>
+
+
+                    <!-- CAREER -->
+
+                    {% if resume.career %}
+
+                    <div class="resume-career">
+                        {{ resume.career }}
+                    </div>
+
+                    {% endif %}
+
+
+                    <!-- CONTACT -->
+
+                    <div class="resume-contact">
+
+                        {{ resume.email }}
+
+                        {% if resume.phone %}
+                            • {{ resume.phone }}
+                        {% endif %}
+
+                        {% if resume.location %}
+                            • {{ resume.location }}
+                        {% endif %}
+
+                        <br>
+
+                        {% if resume.linkedin %}
+                            {{ resume.linkedin }}
+                        {% endif %}
+
+                        {% if resume.github %}
+                            • {{ resume.github }}
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- SUMMARY -->
+
+                    {% if resume.summary %}
+
+                    <div class="resume-section">
+
+                        <h3>
+                            Professional Summary
+                        </h3>
+
+                        <p>
+                            {{ resume.summary }}
+                        </p>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    <!-- SKILLS -->
+
+                    {% if resume.skills %}
+
+                    <div class="resume-section">
+
+                        <h3>
+                            Skills
+                        </h3>
+
+                        <div class="resume-skills">
+
+                            {% for skill in resume.skills.split(',') %}
+
+                                {% if skill.strip() %}
+
+                                <span>
+                                    {{ skill.strip() }}
+                                </span>
+
+                                {% endif %}
+
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    <!-- EXPERIENCE -->
+
+                    {% if resume.experience %}
+
+                    <div class="resume-section">
+
+                        <h3>
+                            Experience
+                        </h3>
+
+                        <p>
+                            {{ resume.experience }}
+                        </p>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    <!-- PROJECTS -->
+
+                    {% if resume.projects %}
+
+                    <div class="resume-section">
+
+                        <h3>
+                            Projects
+                        </h3>
+
+                        <p>
+                            {{ resume.projects }}
+                        </p>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    <!-- EDUCATION -->
+
+                    {% if resume.education %}
+
+                    <div class="resume-section">
+
+                        <h3>
+                            Education
+                        </h3>
+
+                        <p>
+                            {{ resume.education }}
+                        </p>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    <!-- CERTIFICATIONS -->
+
+                    {% if resume.certifications %}
+
+                    <div class="resume-section">
+
+                        <h3>
+                            Certifications
+                        </h3>
+
+                        <p>
+                            {{ resume.certifications }}
+                        </p>
+
+                    </div>
+
+                    {% endif %}
+
+
+                </div>
+
+
+                <!-- PRINT -->
+
+                <button
+                    type="button"
+                    onclick="window.print()"
+                    class="print-button"
+                >
+                    🖨️ Download / Print Resume
+                </button>
+
+
+                {% else %}
+
+
+                <!-- EMPTY PREVIEW -->
+
+                <div class="resume-preview empty-preview">
+
+                    <div class="empty-preview-content">
+
+                        <div class="empty-preview-icon">
+                            📄
+                        </div>
+
+                        <p>
+                            Your professional resume preview
+                            will appear here.
+                            <br><br>
+                            Fill in your details and click
+                            <strong>Generate My Resume</strong>.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                {% endif %}
+
+
+            </div>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>

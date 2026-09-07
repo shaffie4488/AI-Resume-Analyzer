@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard - ResumeIQ</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<!-- ==========================================
+     NAVBAR
+========================================== -->
+
+<header class="dashboard-header">
+
+    <div class="logo">
+        <span class="logo-text">Resume<span>IQ</span></span>
+    </div>
+
+    <nav>
+
+        <a href="{{ url_for('dashboard') }}">
+            Dashboard
+        </a>
+
+        <a href="{{ url_for('upload') }}">
+            Analyze Resume
+        </a>
+
+        <a href="{{ url_for('jobs') }}">
+            Jobs
+        </a>
+
+        <a href="{{ url_for('history') }}">
+            History
+        </a>
+
+        <a href="{{ url_for('logout') }}"
+           class="logout-link">
+            Logout
+        </a>
+
+    </nav>
+
+</header>
+
+
+<!-- ==========================================
+     DASHBOARD
+========================================== -->
+
+<main class="dashboard-container">
+
+
+    <!-- =====================================
+         WELCOME
+    ====================================== -->
+
+    <section class="welcome-section">
+
+        <div>
+
+            <p class="dashboard-label">
+                YOUR DASHBOARD
+            </p>
+
+            <h1>
+                Welcome, {{ user_name }} 👋
+            </h1>
+
+            <p>
+                Manage your resume, analyze your skills,
+                and discover career opportunities.
+            </p>
+
+        </div>
+
+
+        <a href="{{ url_for('upload') }}"
+           class="dashboard-button">
+
+            Analyze My Resume
+
+        </a>
+
+    </section>
+
+
+    <!-- =====================================
+         STAT CARDS
+    ====================================== -->
+
+    <section class="stats-grid">
+
+
+        <!-- RESUME STATUS -->
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                📄
+            </div>
+
+            <div>
+
+                <h3>
+                    Resume Status
+                </h3>
+
+                <p>
+                    {{ resume_status }}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- RESUME SCORE -->
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                📊
+            </div>
+
+            <div>
+
+                <h3>
+                    Resume Score
+                </h3>
+
+                <p>
+                    {{ resume_score }}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- SKILLS FOUND -->
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                💡
+            </div>
+
+            <div>
+
+                <h3>
+                    Skills Found
+                </h3>
+
+                <p>
+                    {{ skills_count }}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- JOB MATCHES -->
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                💼
+            </div>
+
+            <div>
+
+                <h3>
+                    Job Matches
+                </h3>
+
+                <p>
+                    {{ job_matches }}
+                </p>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =====================================
+         LATEST RESUME
+    ====================================== -->
+
+    {% if resume_filename %}
+
+    <section class="getting-started">
+
+        <h2>
+            📄 Latest Resume
+        </h2>
+
+        <div class="steps">
+
+            <div class="step">
+
+                <span>
+                    ✓
+                </span>
+
+                <div>
+
+                    <h3>
+                        {{ resume_filename }}
+                    </h3>
+
+                    <p>
+                        Your latest uploaded resume has been
+                        analyzed successfully.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    {% endif %}
+
+
+    <!-- =====================================
+         MAIN DASHBOARD CARDS
+    ====================================== -->
+
+    <section class="dashboard-grid">
+
+
+        <!-- =================================
+             RESUME ANALYZER
+        ================================== -->
+
+        <div class="dashboard-card">
+
+            <div class="card-icon">
+                📄
+            </div>
+
+            <h2>
+                Analyze Your Resume
+            </h2>
+
+            <p>
+                Upload your resume and let our AI analyze
+                your skills, experience, education and
+                overall resume quality.
+            </p>
+
+            <a href="{{ url_for('upload') }}"
+               class="card-button">
+
+                Upload Resume →
+
+            </a>
+
+        </div>
+
+
+        <!-- =================================
+             SKILL ANALYSIS
+        ================================== -->
+
+        <div class="dashboard-card">
+
+            <div class="card-icon">
+                🧠
+            </div>
+
+            <h2>
+                AI Skill Analysis
+            </h2>
+
+            <p>
+                Discover your existing skills and identify
+                important skills you should develop for
+                your desired career.
+            </p>
+
+            <a href="{{ url_for('analysis') }}"
+               class="card-button">
+
+                View Analysis →
+
+            </a>
+
+        </div>
+
+
+        <!-- =================================
+             JOB RECOMMENDATIONS
+        ================================== -->
+
+        <div class="dashboard-card">
+
+            <div class="card-icon">
+                💼
+            </div>
+
+            <h2>
+                Job Recommendations
+            </h2>
+
+            <p>
+                Find suitable job roles based on your
+                resume, skills, education and experience.
+            </p>
+
+            <a href="{{ url_for('jobs') }}"
+               class="card-button">
+
+                Explore Jobs →
+
+            </a>
+
+        </div>
+
+
+        <!-- =================================
+             AI RESUME BUILDER - NEW
+        ================================== -->
+
+        <div class="dashboard-card">
+
+            <div class="card-icon">
+                ✨
+            </div>
+
+            <h2>
+                AI Resume Builder
+            </h2>
+
+            <p>
+                Create a professional, ATS-friendly resume
+                using your education, skills, experience
+                and projects with AI assistance.
+            </p>
+
+            <a href="{{ url_for('resume_builder') }}"
+               class="card-button">
+
+                Build My Resume →
+
+            </a>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =====================================
+         GETTING STARTED
+    ====================================== -->
+
+    <section class="getting-started">
+
+        <h2>
+            Get Started With ResumeIQ
+        </h2>
+
+
+        <div class="steps">
+
+
+            <!-- STEP 1 -->
+
+            <div class="step">
+
+                <span>
+                    1
+                </span>
+
+                <div>
+
+                    <h3>
+                        Upload Your Resume
+                    </h3>
+
+                    <p>
+                        Upload your PDF resume to begin.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- STEP 2 -->
+
+            <div class="step">
+
+                <span>
+                    2
+                </span>
+
+                <div>
+
+                    <h3>
+                        Let AI Analyze It
+                    </h3>
+
+                    <p>
+                        Our system analyzes your resume
+                        and identifies important information.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- STEP 3 -->
+
+            <div class="step">
+
+                <span>
+                    3
+                </span>
+
+                <div>
+
+                    <h3>
+                        Improve Your Profile
+                    </h3>
+
+                    <p>
+                        Follow AI suggestions and discover
+                        matching career opportunities.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+</body>
+
+</html>

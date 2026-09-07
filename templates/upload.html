@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Upload Resume - ResumeIQ</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<!-- ==========================================
+     HEADER
+========================================== -->
+
+<header class="dashboard-header">
+
+    <div class="logo">
+        ResumeIQ
+    </div>
+
+
+    <nav>
+
+        <a href="{{ url_for('dashboard') }}">
+            Dashboard
+        </a>
+
+        <a href="{{ url_for('upload') }}">
+            Analyze Resume
+        </a>
+
+        <a href="{{ url_for('jobs') }}">
+            Jobs
+        </a>
+
+        <!-- HISTORY BUTTON -->
+
+        <a href="{{ url_for('history') }}">
+            History
+        </a>
+
+        <a href="{{ url_for('logout') }}"
+           class="logout-link">
+            Logout
+        </a>
+
+    </nav>
+
+</header>
+
+
+<!-- ==========================================
+     UPLOAD SECTION
+========================================== -->
+
+<main class="upload-container">
+
+    <div class="upload-card">
+
+
+        <!-- Upload Icon -->
+
+        <div class="upload-icon">
+            📄
+        </div>
+
+
+        <!-- Heading -->
+
+        <h1>
+            Upload Your Resume
+        </h1>
+
+
+        <!-- Description -->
+
+        <p>
+            Upload your PDF resume and let ResumeIQ
+            analyze your skills and career profile.
+        </p>
+
+
+        <!-- =====================================
+             UPLOAD FORM
+        ====================================== -->
+
+        <form method="POST"
+              action="{{ url_for('upload') }}"
+              enctype="multipart/form-data">
+
+
+            <label for="resume"
+                   class="file-area">
+
+
+                <span class="upload-symbol">
+                    ⬆️
+                </span>
+
+
+                <strong>
+                    Choose your resume
+                </strong>
+
+
+                <small>
+                    PDF files only
+                </small>
+
+
+                <input
+                    type="file"
+                    id="resume"
+                    name="resume"
+                    accept=".pdf"
+                    required
+                >
+
+            </label>
+
+
+            <!-- Analyze Button -->
+
+            <button type="submit"
+                    class="upload-button">
+
+                Analyze Resume
+
+            </button>
+
+        </form>
+
+
+        <!-- Error Message -->
+
+        {% if error %}
+
+            <p style="
+                color: #dc2626;
+                margin-top: 15px;
+                font-weight: 600;
+            ">
+                {{ error }}
+            </p>
+
+        {% endif %}
+
+
+        <!-- Back to Dashboard -->
+
+        <a href="{{ url_for('dashboard') }}"
+           class="back-home">
+
+            ← Back to Dashboard
+
+        </a>
+
+
+    </div>
+
+</main>
+
+
+</body>
+
+</html>

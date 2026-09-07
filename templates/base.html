@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}ResumeIQ{% endblock %}</title>
+
+    <style>
+        /* =========================================================
+           RESUMEIQ - GLOBAL BASE STYLES
+           ========================================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f6f8fc;
+            color: #111827;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        button,
+        input,
+        textarea,
+        select {
+            font-family: inherit;
+        }
+
+
+        /* =========================================================
+           HEADER / NAVIGATION
+           ========================================================= */
+
+        .main-header {
+            width: 100%;
+            min-height: 76px;
+            padding: 0 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+
+            position: relative;
+            z-index: 1000;
+        }
+
+
+        /* LOGO */
+
+        .main-header .logo {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+
+            color: #111827;
+            font-size: 25px;
+            font-weight: 800;
+            letter-spacing: -0.7px;
+        }
+
+        .main-header .logo-icon {
+            width: 36px;
+            height: 36px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #2563eb;
+            color: #ffffff;
+
+            border-radius: 9px;
+
+            font-size: 17px;
+            font-weight: 800;
+        }
+
+        .main-header .logo-text {
+            color: #111827;
+        }
+
+        .main-header .logo-text span {
+            color: #2563eb;
+        }
+
+
+        /* NAVIGATION */
+
+        .main-header nav {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .main-header nav a {
+            position: relative;
+
+            color: #374151;
+
+            font-size: 15px;
+            font-weight: 600;
+
+            padding: 9px 0;
+
+            transition: color 0.25s ease;
+        }
+
+        .main-header nav a:hover {
+            color: #2563eb;
+        }
+
+        /* Active page */
+
+        .main-header nav a.active {
+            color: #2563eb;
+        }
+
+        .main-header nav a.active::after {
+            content: "";
+
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            height: 2px;
+
+            background: #2563eb;
+            border-radius: 10px;
+        }
+
+
+        /* GET STARTED BUTTON */
+
+        .main-header nav .nav-button {
+            padding: 11px 19px;
+
+            background: #2563eb;
+            color: #ffffff !important;
+
+            border-radius: 8px;
+
+            transition: all 0.25s ease;
+        }
+
+        .main-header nav .nav-button:hover {
+            background: #1d4ed8;
+            color: #ffffff !important;
+
+            transform: translateY(-1px);
+        }
+
+        .main-header nav .nav-button::after {
+            display: none;
+        }
+
+
+        /* LOGOUT */
+
+        .main-header nav .logout-link {
+            color: #dc2626;
+        }
+
+        .main-header nav .logout-link:hover {
+            color: #b91c1c;
+        }
+
+        .main-header nav .logout-link::after {
+            display: none;
+        }
+
+
+        /* =========================================================
+           PAGE CONTAINER
+           ========================================================= */
+
+        .page-container {
+            width: 86%;
+            max-width: 1200px;
+
+            margin: 0 auto;
+
+            padding: 45px 0;
+        }
+
+
+        /* =========================================================
+           FLASH MESSAGES
+           ========================================================= */
+
+        .flash-container {
+            width: 86%;
+            max-width: 1200px;
+
+            margin: 20px auto 0;
+        }
+
+        .flash-message {
+            padding: 13px 17px;
+
+            border-radius: 9px;
+
+            margin-bottom: 10px;
+
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .flash-message.success {
+            background: #ecfdf5;
+            color: #047857;
+            border: 1px solid #a7f3d0;
+        }
+
+        .flash-message.error {
+            background: #fef2f2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+
+        .flash-message.warning {
+            background: #fffbeb;
+            color: #b45309;
+            border: 1px solid #fde68a;
+        }
+
+        .flash-message.info {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #bfdbfe;
+        }
+
+
+        /* =========================================================
+           COMMON BUTTONS
+           ========================================================= */
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 13px 22px;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+            font-weight: 700;
+
+            border: none;
+
+            cursor: pointer;
+
+            transition: all 0.25s ease;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.18);
+        }
+
+        .btn-secondary {
+            background: #ffffff;
+            color: #374151;
+
+            border: 1px solid #d1d5db;
+        }
+
+        .btn-secondary:hover {
+            border-color: #2563eb;
+            color: #2563eb;
+            transform: translateY(-2px);
+        }
+
+
+        /* =========================================================
+           FOOTER
+           ========================================================= */
+
+        .main-footer {
+            margin-top: 60px;
+
+            padding: 45px 7% 25px;
+
+            background: #111827;
+
+            text-align: center;
+        }
+
+        .footer-logo {
+            margin-bottom: 10px;
+
+            color: #ffffff;
+
+            font-size: 23px;
+            font-weight: 800;
+        }
+
+        .footer-logo span {
+            color: #60a5fa;
+        }
+
+        .main-footer > p {
+            margin-bottom: 25px;
+
+            color: #9ca3af;
+
+            font-size: 14px;
+        }
+
+        .footer-bottom {
+            padding-top: 20px;
+
+            border-top: 1px solid #374151;
+
+            color: #6b7280;
+
+            font-size: 13px;
+        }
+
+
+        /* =========================================================
+           RESPONSIVE NAVIGATION
+           ========================================================= */
+
+        @media (max-width: 800px) {
+
+            .main-header {
+                padding: 17px 5%;
+
+                flex-direction: column;
+
+                gap: 14px;
+            }
+
+            .main-header nav {
+                gap: 17px;
+
+                flex-wrap: wrap;
+
+                justify-content: center;
+            }
+
+            .main-header nav a {
+                font-size: 14px;
+            }
+        }
+
+
+        @media (max-width: 500px) {
+
+            .main-header {
+                padding: 16px 20px;
+            }
+
+            .main-header .logo {
+                font-size: 23px;
+            }
+
+            .main-header .logo-icon {
+                width: 34px;
+                height: 34px;
+            }
+
+            .main-header nav {
+                gap: 12px 16px;
+            }
+
+            .main-header nav a {
+                font-size: 13px;
+            }
+
+            .main-header nav .nav-button {
+                padding: 9px 14px;
+            }
+
+            .page-container {
+                width: 92%;
+                padding: 30px 0;
+            }
+
+            .flash-container {
+                width: 92%;
+            }
+        }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+    <!-- =========================================================
+         NAVIGATION
+         ========================================================= -->
+
+    <header class="main-header">
+
+        <a href="{{ url_for('home') }}" class="logo">
+
+            <span class="logo-icon">R</span>
+
+            <span class="logo-text">
+                Resume<span>IQ</span>
+            </span>
+
+        </a>
+
+
+        <nav>
+
+            {% if session.get('user_id') %}
+
+                <a
+                    href="{{ url_for('dashboard') }}"
+                    class="{% if request.endpoint == 'dashboard' %}active{% endif %}">
+                    Dashboard
+                </a>
+
+                <a
+                    href="{{ url_for('upload') }}"
+                    class="{% if request.endpoint == 'upload' %}active{% endif %}">
+                    Analyze Resume
+                </a>
+
+                <a
+                    href="{{ url_for('jobs') }}"
+                    class="{% if request.endpoint == 'jobs' %}active{% endif %}">
+                    Jobs
+                </a>
+
+                <a
+                    href="{{ url_for('history') }}"
+                    class="{% if request.endpoint == 'history' %}active{% endif %}">
+                    History
+                </a>
+
+                <a
+                    href="{{ url_for('logout') }}"
+                    class="logout-link">
+                    Logout
+                </a>
+
+            {% else %}
+
+                <a
+                    href="{{ url_for('home') }}"
+                    class="{% if request.endpoint == 'home' %}active{% endif %}">
+                    Home
+                </a>
+
+                <a
+                    href="{{ url_for('login') }}"
+                    class="{% if request.endpoint == 'login' %}active{% endif %}">
+                    Login
+                </a>
+
+                <a
+                    href="{{ url_for('register') }}"
+                    class="nav-button">
+                    Get Started
+                </a>
+
+            {% endif %}
+
+        </nav>
+
+    </header>
+
+
+    <!-- =========================================================
+         FLASH MESSAGES
+         ========================================================= -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            <div class="flash-container">
+
+                {% for category, message in messages %}
+
+                    <div class="flash-message {{ category }}">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- =========================================================
+         PAGE CONTENT
+         ========================================================= -->
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+
+    <!-- =========================================================
+         FOOTER
+         ========================================================= -->
+
+    <footer class="main-footer">
+
+        <div class="footer-logo">
+            Resume<span>IQ</span>
+        </div>
+
+        <p>
+            AI-powered resume analysis for smarter career decisions.
+        </p>
+
+        <div class="footer-bottom">
+            © 2026 ResumeIQ. All rights reserved.
+        </div>
+
+    </footer>
+
+
+    {% block extra_js %}{% endblock %}
+
+</body>
+</html>
